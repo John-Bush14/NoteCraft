@@ -51,7 +51,7 @@ local function drawScreen(blitlines, song, ticks)
     if song.header.author == "" then song.header.author = song.header["OG-author"] end
 
     print(" - " .. song.header.name .. " - from " .. song.header.author .. " playing for " .. math.floor(ticks or 0) .. "/" .. math.floor(song.header.length) .. " ticks")
- end
+end
 
 local function calculateDimensions(song)
    local dimensions = {
@@ -272,7 +272,7 @@ local function playSong(songFile)
       if ticks == 0 then secSinceTick = 0.05 end -- safegaurd
 
 
-      secSinceTick = secSinceTick + elapsedTime/4
+      secSinceTick = secSinceTick + elapsedTime
 
 
       while secSinceTick >= spt-0.001  do
