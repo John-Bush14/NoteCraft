@@ -1,0 +1,6 @@
+{
+    "workspace.library": ["/home/goppe-struyck/LLS-Addons/addons/cc-tweaked"],
+    "diagnostics.disable": [
+        "deprecated"
+    ]
+}
