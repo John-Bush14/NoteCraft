@@ -140,6 +140,8 @@ local songsFolder = "ipod/songs"
 local songI = 1
 local volumeMod = 1
 
+if not fs.exists(songsFolder) then fs.makeDir(songsFolder) end
+
 local songs = map(fs.list(songsFolder), function(file) return fs.combine(songsFolder, file) end)
 
 function table.size(tbl)
