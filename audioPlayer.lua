@@ -135,7 +135,7 @@ local function getKeys()
    return keys
 end
 
-local songsFolder = "ipod/songs"
+local songsFolder = "NoteCraft/songs"
 
 local songI = 1
 local volumeMod = 1
