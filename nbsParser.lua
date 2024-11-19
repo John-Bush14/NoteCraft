@@ -6,79 +6,80 @@ local str = 999
 local Ubyte = 11
 
 local versionFields = {
-    [0] = {
-        header = {
-            {"length", short},
-	    {"layer-count", short},
-   	    {"name", str},
-   	    {"author", str},
-   	    {"OG-author", str},
-   	    {"description", str},
-   	    {"tempo", short},
-   	    {"auto-saving", byte},
-   	    {"auto-saving-dur", byte},
-   	    {"time-signature", byte},
-   	    {"minutes-spent", int},
-   	    {"leftclick", int},
-   	    {"rightclick", int},
-   	    {"noteblocks-added", int},
-   	    {"noteblocks-removed", int},
-   	    {"OG-filename", str},
-        },
+   [0] = {
+      header = {
+         {"length", short},
+	      {"layer-count", short},
+   	   {"name", str},
+   	   {"author", str},
+   	   {"OG-author", str},
+   	   {"description", str},
+   	   {"tempo", short},
+   	   {"auto-saving", byte},
+   	   {"auto-saving-dur", byte},
+   	   {"time-signature", byte},
+   	   {"minutes-spent", int},
+   	   {"leftclick", int},
+   	   {"rightclick", int},
+   	   {"noteblocks-added", int},
+   	   {"noteblocks-removed", int},
+   	   {"OG-filename", str},
+      },
 
-        notes = {
-            {"jumps-tick", short},
-            {"jumps-layer", short},
-            {"instrument", byte},
-            {"key", byte}
-        },
+      notes = {
+         {"jumps-tick", short},
+         {"jumps-layer", short},
+         {"instrument", byte},
+         {"key", byte}
+      },
 
-        layers = {
-            {"name", str},
-            {"volume", byte}
-        },
-        instruments = {
-            {"name", str},
-            {"file", str},
-            {"key", byte},
-            {"piano", byte}
-        }
-    },
-    [1] = {
-        header = {
-            [1] = {"classic", short, "replace"},
-            [2] = {"NBSversion", byte, "push"},
-            [3] = {"vanilla-instrument-count", byte}
-        }
-    },
-    [2] = {
-        layers = {
-            [3] = {"stereo", Ubyte, "push"}
-        }
-    },
-    [3] = {
-        header = {
-            [4] = {"length", short, "push"}
-        },
+      layers = {
+         {"name", str},
+         {"volume", byte}
+      },
 
-        layers = {
-            [2] = {"lock", byte, "push"},
-        },
+      instruments = {
+         {"name", str},
+         {"file", str},
+         {"key", byte},
+         {"piano", byte}
+      }
+   },
+   [1] = {
+      header = {
+         [1] = {"classic", short, "replace"},
+         [2] = {"NBSversion", byte, "push"},
+         [3] = {"vanilla-instrument-count", byte}
+      }
+   },
+   [2] = {
+      layers = {
+         [3] = {"stereo", Ubyte, "push"}
+      }
+   },
+   [3] = {
+      header = {
+         [4] = {"length", short, "push"}
+      },
 
-        notes = {
-            [5] = {"velocity", byte, "push"},
-            [6] = {"panning", byte, "push"},
-            [7] = {"pitch", short, "push"}
-        }
+      layers = {
+         [2] = {"lock", byte, "push"},
+      },
+
+      notes = {
+         [5] = {"velocity", byte, "push"},
+         [6] = {"panning", byte, "push"},
+         [7] = {"pitch", short, "push"}
+      }
+   },
+   [4] = {
+      header = {
+         [20] = {"loop", byte, "push"},
+         [21] = {"loop-count", byte, "push"},
+         [22] = {"loop-start", short, "push"}
+      }
     },
-    [4] = {
-        header = {
-            [20] = {"loop", byte, "push"},
-            [21] = {"loop-count", byte, "push"},
-            [22] = {"loop-start", short, "push"}
-        }
-    },
-    [5] = {}
+   [5] = {}
 }
 
 function table.len(tbl)
