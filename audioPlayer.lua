@@ -202,13 +202,13 @@ local function playSong(songFile, songs, options)
 
    local ticks = 0
 
-   local paused = options.paused
+   local paused = options.paused == "true"
 
 
    local dimensions = calculateDimensions(song)
 
 
-   local spt = options.forceSpt or (1/((song.header.tempo or 2000)/100))
+   local spt = (1/((tonumber(options.forceTps or "NaN") or song.header.tempo or 2000)/100))
 
 
    local secSinceTick = 0
@@ -257,7 +257,7 @@ local function playSong(songFile, songs, options)
       if ticks == 0 then secSinceTick = 0.05 end -- safegaurd
 
 
-      secSinceTick = secSinceTick + elapsedTime*(options.speed or 1)
+      secSinceTick = secSinceTick + elapsedTime*(tonumber(options.speed) or 1)
 
 
       while secSinceTick >= spt-0.001 do
