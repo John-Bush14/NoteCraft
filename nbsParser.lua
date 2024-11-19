@@ -1,82 +1,83 @@
-local byte = 1
-local short = 2
-local int = 4
-local str = 999
-
-local Ubyte = 11
+local types = {
+   byte = 1,
+   short = 2,
+   int = 4,
+   str = 999,
+   Ubyte = 11,
+}
 
 local versionFields = {
    [0] = {
       header = {
-         {"length", short},
-	      {"layer-count", short},
-   	   {"name", str},
-   	   {"author", str},
-   	   {"OG-author", str},
-   	   {"description", str},
-   	   {"tempo", short},
-   	   {"auto-saving", byte},
-   	   {"auto-saving-dur", byte},
-   	   {"time-signature", byte},
-   	   {"minutes-spent", int},
-   	   {"leftclick", int},
-   	   {"rightclick", int},
-   	   {"noteblocks-added", int},
-   	   {"noteblocks-removed", int},
-   	   {"OG-filename", str},
+         {"length", types.short},
+	      {"layer-count", types.short},
+   	   {"name", types.str},
+   	   {"author", types.str},
+   	   {"OG-author", types.str},
+   	   {"description", types.str},
+   	   {"tempo", types.short},
+   	   {"auto-saving", types.byte},
+   	   {"auto-saving-dur", types.byte},
+   	   {"time-signature", types.byte},
+   	   {"minutes-spent", types.int},
+   	   {"leftclick", types.int},
+   	   {"rightclick", types.int},
+   	   {"noteblocks-added", types.int},
+   	   {"noteblocks-removed", types.int},
+   	   {"OG-filename", types.str},
       },
 
       notes = {
-         {"jumps-tick", short},
-         {"jumps-layer", short},
-         {"instrument", byte},
-         {"key", byte}
+         {"jumps-tick", types.short},
+         {"jumps-layer", types.short},
+         {"instrument", types.byte},
+         {"key", types.byte}
       },
 
       layers = {
-         {"name", str},
-         {"volume", byte}
+         {"name", types.str},
+         {"volume", types.byte},
       },
 
       instruments = {
-         {"name", str},
-         {"file", str},
-         {"key", byte},
-         {"piano", byte}
+         {"name", types.str},
+         {"file", types.str},
+         {"key", types.byte},
+         {"piano", types.byte},
       }
    },
    [1] = {
       header = {
-         [1] = {"classic", short, "replace"},
-         [2] = {"NBSversion", byte, "push"},
-         [3] = {"vanilla-instrument-count", byte}
+         [1] = {"classic", types.short, "replace"},
+         [2] = {"NBSversion", types.byte, "push"},
+         [3] = {"vanilla-instrument-count", types.byte}
       }
    },
    [2] = {
       layers = {
-         [3] = {"stereo", Ubyte, "push"}
+         [3] = {"stereo", types.Ubyte, "push"}
       }
    },
    [3] = {
       header = {
-         [4] = {"length", short, "push"}
+         [4] = {"length", types.short, "push"}
       },
 
       layers = {
-         [2] = {"lock", byte, "push"},
+         [2] = {"lock", types.byte, "push"},
       },
 
       notes = {
-         [5] = {"velocity", byte, "push"},
-         [6] = {"panning", byte, "push"},
-         [7] = {"pitch", short, "push"}
+         [5] = {"velocity", types.byte, "push"},
+         [6] = {"panning", types.byte, "push"},
+         [7] = {"pitch", types.short, "push"}
       }
    },
    [4] = {
       header = {
-         [20] = {"loop", byte, "push"},
-         [21] = {"loop-count", byte, "push"},
-         [22] = {"loop-start", short, "push"}
+         [20] = {"loop", types.byte, "push"},
+         [21] = {"loop-count", types.byte, "push"},
+         [22] = {"loop-start", types.short, "push"}
       }
     },
    [5] = {}
@@ -123,16 +124,16 @@ function bytesToInt(str, signed)
 end
 
 function read(file, bytes)
-    if bytes == str then
+    if bytes == types.str then
         local str = ""
-        local len = file:read(int)
+        local len = file:read(types.int)
         if len == nil then return nil end
-        for _=1,bytesToInt(len) do str = str .. file:read(byte) end
+        for _=1,bytesToInt(len) do str = str .. file:read(types.byte) end
         return str
-    elseif bytes ~= Ubyte then
+    elseif bytes ~= types.Ubyte then
         return bytesToInt(file:read(bytes), false)
     else
-        return bytesToInt(file:read(byte), true)
+        return bytesToInt(file:read(types.byte), true)
     end
 end
 
@@ -168,12 +169,12 @@ return function(file)
 
    print(file, " pls no nil man")
 
-   local classic = read(file, short)
+   local classic = read(file, types.short)
 
    print(classic)
 
    if classic == 0 then
-       local version = read(file, byte)
+       local version = read(file, types.byte)
        print(version)
        for i=1,version do
            table.modify(fields, versionFields[i])
@@ -190,7 +191,7 @@ return function(file)
    -- notes
    local i = 1
    local note = {}
-   local b = file:read(short)
+   local b = file:read(types.short)
 
    while not (i == 1 and bytesToInt(b) == 0) do
       note[fields.notes[i][1]] = bytesToInt(b)
