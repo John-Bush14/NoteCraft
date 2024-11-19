@@ -275,11 +275,11 @@ local function playSong(songFile)
       secSinceTick = secSinceTick + elapsedTime
 
 
-      while secSinceTick >= spt-0.001  do
-
+      while secSinceTick >= spt-0.001 do
          secSinceTick = secSinceTick-spt
 
-         if not paused then
+         if not paused then -- if paused then continue end
+
 
          if type(note) ~= nil then ticks = ticks + 1 end
 
@@ -324,8 +324,7 @@ local function playSong(songFile)
          for y, blitline in pairs(blitlines) do
             blitlines[y] = string.sub(blitline, 3)
          end
-         end
-      end
+      end end
    end
 end
 
