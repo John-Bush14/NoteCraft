@@ -254,7 +254,7 @@ local function playSong(songFile, songs, options)
 
          paused, changeSong = handleInput(paused, songs)
 
-         if changeSong then return playSong(songs[songI]) end
+         if changeSong then return playSong(songs[songI], songs) end
 
 
          elapsedTime = os.clock() - start
@@ -307,7 +307,7 @@ local function playSong(songFile, songs, options)
          if note == nil then
             songI = songI + 1
             if songI > #songs then songI = 1 end
-            return playSong(songs[songI])
+            return playSong(songs[songI], songs)
          end
 
          drawScreen(blitlines, song, ticks)
@@ -320,12 +320,4 @@ local function playSong(songFile, songs, options)
    end
 end
 
-return function(target, options)
-   local songs = {target}
-
-   if fs.isDir(target) then
-      songs = map(fs.list(target), function(file) return fs.combine(target, file) end)
-   end
-
-   playSong(songs[1], songs, options)
-end
+return playSong

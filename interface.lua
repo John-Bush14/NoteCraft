@@ -1,6 +1,6 @@
 local input = {}
 
-local target = nil
+local target = ""
 
 
 for _, arg in pairs({...}) do
@@ -11,4 +11,14 @@ for _, arg in pairs({...}) do
 end
 
 
-require("audioPlayer")(target, input)
+target = target or error("no target provided")
+
+
+local songs = {target}
+
+if fs.isDir(target) then
+   songs = map(fs.list(target), function(file) return fs.combine(target, file) end)
+end
+
+
+require("audioPlayer")(songs[i], songs, input)
