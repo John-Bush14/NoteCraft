@@ -9,3 +9,6 @@ for _, arg in pairs({...}) do
    if equals ~= nil then input[string.sub(arg, 1, equals-1)] = string.sub(arg, equals)
    else target = arg end
 end
+
+
+require("audioPlayer")(target, input)

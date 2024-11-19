@@ -135,14 +135,7 @@ local function getKeys()
    return keys
 end
 
-local songsFolder = "NoteCraft/songs"
-
 local songI = 1
-local volumeMod = 1
-
-if not fs.exists(songsFolder) then fs.makeDir(songsFolder) end
-
-local songs = map(fs.list(songsFolder), function(file) return fs.combine(songsFolder, file) end)
 
 function table.size(tbl)
     local x = 0
@@ -150,7 +143,7 @@ function table.size(tbl)
     return x
 end
 
-local function handleInput(paused)
+local function handleInput(paused, songs)
    local songIChanged = false
 
    for _, key in pairs(getKeys()) do
@@ -187,7 +180,7 @@ local function playTick(k, note, song, instruments, tempoChangers)
       if song.layers ~= nil then layer = song.layers[layerI] or error(textutils.serialize(song.layers) .. " fuck: " .. layerI) end
 
       local pitch  = math.clamp((note.key-33)+((note.pitch or 0)/100), 0, 24)
-      local volume = math.clamp(((note.velocity or 50)*(layer.volume/100)*volumeMod)/(100/3), 0, 3)
+      local volume = math.clamp(((note.velocity or 50)*(layer.volume/100))/(100/3), 0, 3)
       local instrument = instruments[note.instrument + 1] or error("Custom Instrument Not Supported!")
 
       AVpitch = (pitch  + (AVpitch or pitch))/2
@@ -210,21 +203,20 @@ local function playTick(k, note, song, instruments, tempoChangers)
    return AVpitch, AVvolume, k, note
 end
 
-local function playSong(songFile)
-   local song, instruments = parseSong(songs[songI])
+local function playSong(songFile, songs, options)
+   local song, instruments = parseSong(songFile)
 
 
    local ticks = 0
 
-   local paused = false
+   local paused = options.paused
 
 
    local dimensions = calculateDimensions(song)
 
 
-   local spt = 1/((song.header.tempo or 2000)/100)
+   local spt = options.forceSpt or (1/((song.header.tempo or 2000)/100))
 
-   --if spt > 0.05 then spt = 0.05 end
 
    local secSinceTick = 0
 
@@ -260,7 +252,7 @@ local function playSong(songFile)
       while elapsedTime <= 0 do
          local changeSong = false
 
-         paused, changeSong = handleInput(paused)
+         paused, changeSong = handleInput(paused, songs)
 
          if changeSong then return playSong(songs[songI]) end
 
@@ -272,7 +264,7 @@ local function playSong(songFile)
       if ticks == 0 then secSinceTick = 0.05 end -- safegaurd
 
 
-      secSinceTick = secSinceTick + elapsedTime
+      secSinceTick = secSinceTick + elapsedTime*(options.speed or 1)
 
 
       while secSinceTick >= spt-0.001 do
@@ -328,4 +320,12 @@ local function playSong(songFile)
    end
 end
 
-playSong(songs[1])
+return function(target, options)
+   local songs = {target}
+
+   if fs.isDir(target) then
+      songs = map(fs.list(target), function(file) return fs.combine(target, file) end)
+   end
+
+   playSong(songs[1], songs, options)
+end
