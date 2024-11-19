@@ -1,10 +1,9 @@
 return function(table, math)
    function table.map(tbl, fn)
-      local result = {}
       for i, v in ipairs(tbl) do
-         result[i] = fn(v)
+         tbl[i] = fn(v)
       end
-      return result
+      return tbl
    end
 
    function math.clamp(int, min, max) return math.min(math.max(int, min), max) end
