@@ -18,22 +18,15 @@ local instrumentsVanilla = {
    "Tempo Changer"
 }
 
-local speakers = {peripheral.find("speaker")}
+require("tools")(table, math)
 
-function math.clamp(int, min, max) return math.min(math.max(int, min), max) end
+local speakers = {peripheral.find("speaker")}
 local pause = keys.space
 local nextK = keys.right
 local previous = keys.left
 local volumeUp = keys.up
 local volumeDown = keys.down
 
-local function map(tbl, fn)
-    local result = {}
-    for i, v in ipairs(tbl) do
-        result[i] = fn(v)
-    end
-    return result
-end
 
 local function drawScreen(blitlines, song, ticks)
     term.clear()

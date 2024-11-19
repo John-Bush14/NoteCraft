@@ -1,3 +1,6 @@
+require("tools")(table, math)
+
+
 local input = {}
 
 local target = ""
@@ -17,8 +20,8 @@ target = target or error("no target provided")
 local songs = {target}
 
 if fs.isDir(target) then
-   songs = map(fs.list(target), function(file) return fs.combine(target, file) end)
+---@diagnostic disable-next-line: undefined-field -- table.map from tools.lua extend but lsp doesn't know
+   songs = table.map(fs.list(target), function(file) return fs.combine(target, file) end)
 end
 
-
-require("audioPlayer")(songs[i], songs, input)
+require("audioPlayer")(songs[1], songs, input)
