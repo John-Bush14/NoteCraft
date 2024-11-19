@@ -1,3 +1,6 @@
+require("tools")(table, math)
+
+
 local types = {
    byte = 1,
    short = 2,
@@ -153,18 +156,8 @@ function readPart(fields, size, file)
    return part
 end
 
-function table.copy(original)
-	local copy = {}
-	for k, v in pairs(original) do
-		if type(v) == "table" then
-			v = table.copy(v)
-		end
-		copy[k] = v
-	end
-	return copy
-end
-
 return function(file)
+---@diagnostic disable-next-line: undefined-field -- from tools
    local fields = table.copy(versionFields[0])
 
    print(file, " pls no nil man")
