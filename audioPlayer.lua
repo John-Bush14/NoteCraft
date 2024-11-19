@@ -24,8 +24,6 @@ local speakers = {peripheral.find("speaker")}
 local pause = keys.space
 local nextK = keys.right
 local previous = keys.left
-local volumeUp = keys.up
-local volumeDown = keys.down
 
 
 local function drawScreen(blitlines, song, ticks)
@@ -151,10 +149,6 @@ local function handleInput(paused, songs)
             if songI < 1 then songI = #songs end
             print(songI, songs[songI])
             songIChanged = true
-      elseif key == volumeUp then
-            volumeMod = volumeMod*1.01
-      elseif key == volumeDown then
-            volumeMod = volumeMod/1.01
       end
    end
 
