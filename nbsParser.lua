@@ -106,7 +106,7 @@ function table.modify(tbl, mods)
     end
 end
 
-function bytesToInt(str, signed)
+local function bytesToInt(str, signed)
    local bytes = {}
    for char in str:gmatch(".") do table.insert(bytes, string.byte(char)) end
 
@@ -140,7 +140,7 @@ function read(file, bytes)
     end
 end
 
-function readPart(fields, size, file)
+local function readPart(fields, size, file)
    local part = {}
 
    local block = {}
@@ -179,7 +179,7 @@ return function(file)
    local data = {header = {}, notes = {}}
 
    -- header
-   data.header = table.unpack(readPart(fields.header, 1, file))
+   data.header = table.unpack(readPart(fields.header, 1, file) or error("no header? :skull:"))
 
    -- notes
    local i = 1
@@ -209,7 +209,7 @@ return function(file)
    print("layers!")
    data.layers = readPart(fields.layers, data.header["layer-count"], file)
 
-   local instruments = read(file, Ubyte)
+   local instruments = read(file, types.Ubyte)
 
    if instruments == nil then return data end
 
