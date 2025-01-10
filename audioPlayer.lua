@@ -210,8 +210,9 @@ local function playSong(songFile, songs, options)
 
    local k, note = nil, nil
 
+   local gpu = {}
 
-   local blitlines = {}
+   gpu.blitlines = {}
 
    local emptyBlitline = ""
 
@@ -222,7 +223,7 @@ local function playSong(songFile, songs, options)
    local _, height = term.getSize()
 
    for _=1,height,1 do
-      table.insert(blitlines, emptyBlitline)
+      table.insert(gpu.blitlines, emptyBlitline)
    end
 
 
@@ -284,10 +285,10 @@ local function playSong(songFile, songs, options)
          local volumeY = math.floor((dimensions.volume.paddingY-((AVvolume or 0)*dimensions.volume.width)))
 
 
-         for y, blitline in pairs(blitlines) do
-            if y == pitchY and AVpitch or 0 > 0 then blitlines[y] = blitline .. "fb"
-            elseif y == volumeY and AVvolume or 0 > 0 then blitlines[y] = blitline .. "fd"
-            else blitlines[y] = blitline .. "ff" end
+         for y, blitline in pairs(gpu.blitlines) do
+            if y == pitchY and AVpitch or 0 > 0 then gpu.blitlines[y] = blitline .. "fb"
+            elseif y == volumeY and AVvolume or 0 > 0 then gpu.blitlines[y] = blitline .. "fd"
+            else gpu.blitlines[y] = blitline .. "ff" end
          end
 
 
@@ -300,8 +301,8 @@ local function playSong(songFile, songs, options)
          drawScreen(blitlines, song, ticks)
 
 
-         for y, blitline in pairs(blitlines) do
-            blitlines[y] = string.sub(blitline, 3)
+         for y, blitline in pairs(gpu.blitlines) do
+            gpu.blitlines[y] = string.sub(blitline, 3)
          end
       end end
    end
