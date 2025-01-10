@@ -205,6 +205,17 @@ function gpu.init_screen(dimensions)
    end
 end
 
+function gpu.processData(AVpitch, AVvolume)
+   local pitchY = math.floor((dimensions.pitch.paddingY-((AVpitch or 0)*dimensions.pitch.width)))
+   local volumeY = math.floor((dimensions.volume.paddingY-((AVvolume or 0)*dimensions.volume.width)))
+
+   for y, blitline in pairs(gpu.blitlines) do
+      if y == pitchY and AVpitch or 0 > 0 then gpu.blitlines[y] = blitline .. "fb"
+      elseif y == volumeY and AVvolume or 0 > 0 then gpu.blitlines[y] = blitline .. "fd"
+      else gpu.blitlines[y] = blitline .. "ff" end
+   end
+end
+
 function gpu.moveScreen(x)
    for y, blitline in pairs(gpu.blitlines) do
       gpu.blitlines[y] = string.sub(blitline, x)
@@ -288,15 +299,7 @@ local function playSong(songFile, songs, options)
          end
 
 
-         local pitchY = math.floor((dimensions.pitch.paddingY-((AVpitch or 0)*dimensions.pitch.width)))
-         local volumeY = math.floor((dimensions.volume.paddingY-((AVvolume or 0)*dimensions.volume.width)))
-
-
-         for y, blitline in pairs(gpu.blitlines) do
-            if y == pitchY and AVpitch or 0 > 0 then gpu.blitlines[y] = blitline .. "fb"
-            elseif y == volumeY and AVvolume or 0 > 0 then gpu.blitlines[y] = blitline .. "fd"
-            else gpu.blitlines[y] = blitline .. "ff" end
-         end
+         gpu.processData(AVpitch, AVvolume)
 
 
          if note == nil then
@@ -305,8 +308,8 @@ local function playSong(songFile, songs, options)
             return playSong(songs[songI], songs)
          end
 
-         gpu.drawScreen(song, ticks)
 
+         gpu.drawScreen(song, ticks)
 
          gpu.moveScreen(3)
       end end
