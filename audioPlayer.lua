@@ -45,8 +45,11 @@ local function drawScreen(blitlines, song, ticks)
 end
 
 local function calculateDimensions(song)
+   local _, height = term.getSize()
+
    local dimensions = {
-      maxX = math.floor(term.getSize()-6)
+      maxX = math.floor(term.getSize()-6),
+      height = height,
    }
 
    local layerI = 0
@@ -78,8 +81,6 @@ local function calculateDimensions(song)
          AVvolume = 0
       end
    end
-
-   local _, height = term.getSize()
 
    dimensions.pitch = {
       width = (height-5)/(pitchExtremes[2]-pitchExtremes[1])
@@ -190,6 +191,21 @@ local function playTick(k, note, song, instruments, tempoChangers)
    return AVpitch, AVvolume, k, note
 end
 
+local gpu = {}
+
+function gpu.init_screen(dimensions)
+   local emptyBlitline = ""
+
+   for _ = 1-2,dimensions.maxX,1 do
+      emptyBlitline = emptyBlitline .. "f"
+   end
+
+
+   for _=1,dimensions.height,1 do
+      table.insert(gpu.blitlines, emptyBlitline)
+   end
+end
+
 local function playSong(songFile, songs, options)
    local song, instruments = parseSong(songFile)
 
@@ -210,21 +226,7 @@ local function playSong(songFile, songs, options)
 
    local k, note = nil, nil
 
-   local gpu = {}
-
-   gpu.blitlines = {}
-
-   local emptyBlitline = ""
-
-   for _ = 1-2,dimensions.maxX,1 do
-      emptyBlitline = emptyBlitline .. "f"
-   end
-
-   local _, height = term.getSize()
-
-   for _=1,height,1 do
-      table.insert(gpu.blitlines, emptyBlitline)
-   end
+   gpu.init_screen(dimensions)
 
 
    local tempoChangers = {}
