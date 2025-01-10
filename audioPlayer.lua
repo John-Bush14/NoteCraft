@@ -26,24 +26,6 @@ local nextK = keys.right
 local previous = keys.left
 
 
-local function drawScreen(blitlines, song, ticks)
-    term.clear()
-
-
-    for y, blitline in pairs(blitlines) do
-       term.setCursorPos(-2, y)
-       term.blit(blitline, blitline, blitline)
-    end
-
-
-   term.setCursorPos(1, 1)
-
-    if song.header.name == "" then song.header.name = song.header["OG-filename"] end
-    if song.header.author == "" then song.header.author = song.header["OG-author"] end
-
-    print(" - " .. song.header.name .. " - from " .. song.header.author .. " playing for " .. math.floor(ticks or 0) .. "/" .. math.floor(song.header.length) .. " ticks")
-end
-
 local function calculateDimensions(song)
    local _, height = term.getSize()
 
@@ -193,6 +175,23 @@ end
 
 local gpu = {}
 
+function gpu.drawScreen(song, ticks)
+    term.clear()
+
+    for y, blitline in pairs(gpu.blitlines) do
+       term.setCursorPos(-2, y)
+       term.blit(blitline, blitline, blitline)
+    end
+
+
+   term.setCursorPos(1, 1)
+
+    if song.header.name == "" then song.header.name = song.header["OG-filename"] end
+    if song.header.author == "" then song.header.author = song.header["OG-author"] end
+
+    print(" - " .. song.header.name .. " - from " .. song.header.author .. " playing for " .. math.floor(ticks or 0) .. "/" .. math.floor(song.header.length) .. " ticks")
+end
+
 function gpu.init_screen(dimensions)
    local emptyBlitline = ""
 
@@ -300,7 +299,7 @@ local function playSong(songFile, songs, options)
             return playSong(songs[songI], songs)
          end
 
-         drawScreen(blitlines, song, ticks)
+         gpu.drawScreen(song, ticks)
 
 
          for y, blitline in pairs(gpu.blitlines) do
