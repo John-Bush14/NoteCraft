@@ -1,4 +1,4 @@
-return function(table, math)
+return {extend = function(table, math)
    function table.map(tbl, fn)
       for i, v in ipairs(tbl) do
          tbl[i] = fn(v)
@@ -18,4 +18,4 @@ return function(table, math)
 	   end
 	   return copy
    end
-end
+end}

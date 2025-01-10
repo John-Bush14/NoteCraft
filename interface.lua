@@ -1,4 +1,4 @@
-require("tools")(table, math)
+require("tools").extend(table, math)
 
 
 local input = {}

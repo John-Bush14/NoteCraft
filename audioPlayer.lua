@@ -18,7 +18,7 @@ local instrumentsVanilla = {
    "Tempo Changer"
 }
 
-require("tools")(table, math)
+require("tools").extend(table, math)
 
 local speakers = {peripheral.find("speaker")}
 local pause = keys.space
