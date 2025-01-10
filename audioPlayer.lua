@@ -205,6 +205,12 @@ function gpu.init_screen(dimensions)
    end
 end
 
+function gpu.moveScreen(x)
+   for y, blitline in pairs(gpu.blitlines) do
+      gpu.blitlines[y] = string.sub(blitline, x)
+   end
+end
+
 local function playSong(songFile, songs, options)
    local song, instruments = parseSong(songFile)
 
@@ -302,9 +308,7 @@ local function playSong(songFile, songs, options)
          gpu.drawScreen(song, ticks)
 
 
-         for y, blitline in pairs(gpu.blitlines) do
-            gpu.blitlines[y] = string.sub(blitline, 3)
-         end
+         gpu.moveScreen(3)
       end end
    end
 end
