@@ -159,7 +159,7 @@ local function playSong(songFile, songs, options)
 
          paused, changeSong = handleInput(paused, songs)
 
-         if changeSong then return playSong(songs[songI], songs) end
+         if changeSong then return playSong(songs[songI], songs, options) end
 
 
          elapsedTime = os.clock() - start
@@ -204,7 +204,7 @@ local function playSong(songFile, songs, options)
          if note == nil then
             songI = songI + 1
             if songI > #songs then songI = 1 end
-            return playSong(songs[songI], songs)
+            return playSong(songs[songI], songs, options)
          end
 
 
