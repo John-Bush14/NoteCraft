@@ -146,6 +146,7 @@ local function playSong(songFile, songs, options)
 
    local tempoChangers = {}
 
+   print("start!")
 
    while true do
       local start = os.clock()
@@ -166,7 +167,7 @@ local function playSong(songFile, songs, options)
       end
 
 
-      if ticks == 0 then secSinceTick = 0.05 end -- safegaurd
+      if ticks == 0 then secSinceTick = spt end -- safegaurd
 
 
       secSinceTick = secSinceTick + elapsedTime*(tonumber(options.speed) or 1)
